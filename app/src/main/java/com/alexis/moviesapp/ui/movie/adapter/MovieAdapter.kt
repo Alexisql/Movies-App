@@ -8,7 +8,8 @@ import com.alexis.moviesapp.R
 import com.alexis.moviesapp.domain.model.Movie
 
 class MovieAdapter(
-    private var oldListMovies: List<Movie> = listOf()
+    private var oldListMovies: List<Movie> = listOf(),
+    private val onItemClickSelected: (Int) -> Unit
 ) : RecyclerView.Adapter<MovieViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
@@ -20,7 +21,7 @@ class MovieAdapter(
     override fun getItemCount(): Int = oldListMovies.size
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        holder.setView(oldListMovies[position])
+        holder.setView(oldListMovies[position], onItemClickSelected)
     }
 
     fun updateListMovies(newListMovies: List<Movie>) {

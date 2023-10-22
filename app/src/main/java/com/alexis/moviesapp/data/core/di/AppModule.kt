@@ -2,8 +2,10 @@ package com.alexis.moviesapp.data.core.di
 
 import com.alexis.moviesapp.data.core.AuthInterceptor
 import com.alexis.moviesapp.data.core.Constants.BASE_URL
+import com.alexis.moviesapp.data.retrofit.repository.MovieDetailRepositoryRetrofitImpl
 import com.alexis.moviesapp.data.retrofit.repository.MoviePopularRepositoryImpl
 import com.alexis.moviesapp.data.retrofit.service.MoviePopularService
+import com.alexis.moviesapp.domain.repository.IMovieDetailRepository
 import com.alexis.moviesapp.domain.repository.IMoviePopularRepository
 import dagger.Module
 import dagger.Provides
@@ -52,6 +54,12 @@ object AppModule {
     @Provides
     fun movieRepository(moviePopularService: MoviePopularService): IMoviePopularRepository {
         return MoviePopularRepositoryImpl(moviePopularService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideMovieDetailRepositoryRetrofit(moviePopularService: MoviePopularService): IMovieDetailRepository {
+        return MovieDetailRepositoryRetrofitImpl(moviePopularService)
     }
 
 }

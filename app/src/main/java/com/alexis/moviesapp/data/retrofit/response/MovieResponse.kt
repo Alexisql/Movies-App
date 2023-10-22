@@ -1,6 +1,7 @@
 package com.alexis.moviesapp.data.retrofit.response
 
 import com.alexis.moviesapp.domain.model.Movie
+import com.alexis.moviesapp.domain.model.MovieDetail
 import com.google.gson.annotations.SerializedName
 
 data class MovieResponse(
@@ -14,3 +15,6 @@ data class MovieResponse(
 
 fun MovieResponse.toDomain() =
     Movie(id, title, overview, backdropPath, posterPath, releaseDate)
+
+fun MovieResponse.toMovieDetailDomain() = MovieDetail(toDomain(), false)
+

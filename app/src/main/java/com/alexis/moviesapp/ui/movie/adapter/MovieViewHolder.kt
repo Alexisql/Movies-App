@@ -11,12 +11,17 @@ class MovieViewHolder(view: View) : ViewHolder(view) {
 
     private val binding = ItemMovieBinding.bind(view)
 
-    fun setView(movie: Movie) {
+    fun setView(movie: Movie, onItemClickSelected: (Int) -> Unit) {
         binding.apply {
             tvTitleItemMovie.text = movie.originalTitle
             tvDateItemMovie.text = movie.releaseDate
         }
         val posterMovie: ImageView = binding.ivPosterItemMovie
-        posterMovie.loadImage(binding.root.context, movie.posterPathFull, 30)
+        with(posterMovie) {
+            loadImage(binding.root.context, movie.posterPathFull, 30)
+            setOnClickListener {
+                onItemClickSelected(movie.id)
+            }
+        }
     }
 }

@@ -2,7 +2,9 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.MoviesApp" parent="Theme.Material3.DayNight.NoActionBar"></style>
 
-    <style name="Theme.MoviesApp" parent="Base.Theme.MoviesApp" />
+    <style name="Theme.MoviesApp" parent="Base.Theme.MoviesApp">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
 
     <style name="TextMovie">
         <item name="android:textSize">16sp</item>
