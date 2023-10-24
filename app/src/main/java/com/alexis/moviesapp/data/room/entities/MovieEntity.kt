@@ -9,7 +9,7 @@ import com.alexis.moviesapp.domain.model.MovieDetail
 @Entity(tableName = "Movie")
 data class MovieEntity(
     @PrimaryKey
-    @ColumnInfo("id") val id: Int,
+    @ColumnInfo("id") var id: Int,
     @ColumnInfo("original_title") val originalTitle: String,
     @ColumnInfo("overview") val overview: String,
     @ColumnInfo("backdrop_path") val backdropPath: String,
@@ -23,4 +23,4 @@ fun MovieEntity.toDomain() =
 fun Movie.toData() =
     MovieEntity(id, originalTitle, overview, backdropPath, posterPath, releaseDate)
 
-fun MovieEntity.toMovieDetailDomain() = Result.success(MovieDetail(toDomain(), true))
+fun MovieEntity.toMovieDetailDomain() = MovieDetail(toDomain(), true)

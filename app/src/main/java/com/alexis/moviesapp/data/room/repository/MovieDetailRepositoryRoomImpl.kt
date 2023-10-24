@@ -12,6 +12,10 @@ class MovieDetailRepositoryRoomImpl @Inject constructor(
 ) : IMovieDetailRepository {
     override suspend fun getDetailMovie(idMovie: Int): Result<MovieDetail> {
         val movie = movieDao.getDetailMovie(idMovie)
-        return movie?.toMovieDetailDomain() ?: Result.failure(Exception(MOVIE_NOT_FOUND))
+        return if (movie != null) {
+            Result.success(movie.toMovieDetailDomain())
+        } else {
+            Result.failure(Exception(MOVIE_NOT_FOUND))
+        }
     }
 }

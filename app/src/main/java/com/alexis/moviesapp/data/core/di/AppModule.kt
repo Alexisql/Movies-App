@@ -103,6 +103,4 @@ object AppModule {
         return MovieDetailRepositoryRoomImpl(movieDao)
     }
 
-
-
 }

@@ -9,8 +9,12 @@ import javax.inject.Inject
 class MoviePopularRepositoryImpl @Inject constructor(
     private val moviePopularService: MoviePopularService
 ) : IMoviePopularRepository {
-    override suspend fun getMovies(): List<Movie> {
-        val response = moviePopularService.getMovies().movies
-        return response.map { it.toDomain() }
+    override suspend fun getMovies(): Result<List<Movie>> {
+        return try {
+            val response = moviePopularService.getMovies().movies
+            Result.success(response.map { it.toDomain() })
+        } catch (exception: Throwable) {
+            Result.failure(exception)
+        }
     }
 }

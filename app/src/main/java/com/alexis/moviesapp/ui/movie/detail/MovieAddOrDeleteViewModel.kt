@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alexis.moviesapp.domain.model.Movie
 import com.alexis.moviesapp.domain.repository.IMovieRepository
-import com.alexis.moviesapp.ui.core.Constants
 import com.alexis.moviesapp.ui.core.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -14,15 +14,17 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class MovieAddOrDeleteViewModel @Inject constructor(private val repository: IMovieRepository) :
-    ViewModel() {
+class MovieAddOrDeleteViewModel @Inject constructor(
+    private val repository: IMovieRepository,
+    private val dispatcherIO: CoroutineDispatcher
+) : ViewModel() {
 
     private val _state = MutableStateFlow<ResultState<String>>(ResultState.Loading)
     val state: StateFlow<ResultState<String>> = _state
 
     fun addMovieDB(movie: Movie) {
         viewModelScope.launch {
-            withContext(Constants.DISPATCHER_IO) {
+            withContext(dispatcherIO) {
                 val response = repository.addMovie(movie)
                 response
                     .onSuccess { _state.value = ResultState.Success(it) }
@@ -33,7 +35,7 @@ class MovieAddOrDeleteViewModel @Inject constructor(private val repository: IMov
 
     fun deleteMovieDB(idMovie: Int) {
         viewModelScope.launch {
-            withContext(Constants.DISPATCHER_IO) {
+            withContext(dispatcherIO) {
                 val response = repository.deleteMovie(idMovie)
                 response
                     .onSuccess { _state.value = ResultState.Success(it) }
