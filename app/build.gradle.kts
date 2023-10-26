@@ -74,6 +74,9 @@ dependencies {
     implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
+    // Splash
+    implementation("androidx.core:core-splashscreen:1.0.1")
+
     //Test
     testImplementation ("io.mockk:mockk:1.12.3")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")

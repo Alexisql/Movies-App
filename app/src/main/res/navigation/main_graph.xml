@@ -9,13 +9,13 @@
         android:id="@+id/movieFragment"
         android:name="com.alexis.moviesapp.ui.movie.MovieFragment"
         android:label="fragment_movie"
-        tools:layout="@layout/fragment_movie"/>
+        tools:layout="@layout/fragment_movie" />
 
     <fragment
         android:id="@+id/bookmarkedFragment"
         android:name="com.alexis.moviesapp.ui.movie.bookmarked.BookmarkedFragment"
         android:label="fragment_bookmarked"
-        tools:layout="@layout/fragment_bookmarked"/>
+        tools:layout="@layout/fragment_bookmarked" />
 
     <activity
         android:id="@+id/movieDetailActivity"
@@ -48,6 +48,6 @@
         android:id="@+id/action_to_error_fragment"
         app:destination="@id/errorFragment"
         app:popUpTo="@id/movieFragment"
-        app:popUpToInclusive="false"/>
+        app:popUpToInclusive="false" />
 
 </navigation>
