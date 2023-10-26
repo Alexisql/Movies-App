@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavDirections
 import androidx.recyclerview.widget.GridLayoutManager
 import com.alexis.moviesapp.databinding.FragmentMovieBinding
@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.StateFlow
 @AndroidEntryPoint
 class MovieFragment : BaseFragment() {
 
-    private val movieViewModel: MovieViewModel by viewModels()
+    private val movieViewModel: MovieViewModel by activityViewModels()
     private lateinit var _binding: FragmentMovieBinding
     private val binding get() = _binding
 
