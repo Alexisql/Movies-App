@@ -5,6 +5,8 @@
 </p>
 <p align="center">
 <img src="https://img.shields.io/badge/Kotlin-%23FFFFFF?logo=kotlin">
+<img src="https://img.shields.io/badge/Firebase-%23FFFFFF?logo=firebase">
+<img src="https://img.shields.io/badge/Android-%23FFFFFF?logo=android">
 </p>
 
 Aplicación móvil construida en Kotlin que te permite explorar las películas más populares del momento, guardar tus películas favoritas y ver sus detalles. 
@@ -19,6 +21,7 @@ Para este desarrollo se hace uso de la API [TMDb (The Movie Database)](https://d
 - Integracion Continua **CI/CD**
 - Corrutinas
 - Retrofit
+- **Firebase** Realtime Database
 - Room
 - Inyección de dependencias con **Dagger Hilt**
 - Navigation Component
