@@ -37,7 +37,7 @@ class BookmarkedViewModelTest {
         runTest {
             //Arrange
             val moviesFakeDomain = listOf(MovieBuilder().build())
-            every { repositoryMock.getMovies() } returns flowOf(moviesFakeDomain)
+            every { repositoryMock.getMovies() } returns flowOf(Result.success(moviesFakeDomain))
 
             //Act
             viewModel.getMovies()
