@@ -10,14 +10,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class MovieDetailViewModel @Inject constructor(
     @AppModule.MovieDetailRepositoryRetrofit private val movieRepositoryRetrofit: IMovieDetailRepository,
-    @AppModule.MovieDetailRepositoryRoom private val movieRepositoryRoom: IMovieDetailRepository,
+    @AppModule.MovieDetailRepositoryRealtime private val movieRepositoryRealtime: IMovieDetailRepository,
     private val dispatcherIO: CoroutineDispatcher
 ) : ViewModel() {
 
@@ -26,22 +26,18 @@ class MovieDetailViewModel @Inject constructor(
 
     fun getMovie(idMovie: Int) {
         viewModelScope.launch {
-            withContext(dispatcherIO) {
-                val response = movieRepositoryRoom.getDetailMovie(idMovie)
-                response
-                    .onSuccess {
-                        _state.value = ResultState.Success(it)
-                    }.onFailure {
-                        val responseRetrofit = movieRepositoryRetrofit.getDetailMovie(idMovie)
-                        responseRetrofit
-                            .onSuccess {
-                                _state.value = ResultState.Success(it)
+            val response = movieRepositoryRealtime.getDetailMovie(idMovie)
+            response.flowOn(dispatcherIO)
+                .collect { movie ->
+                    movie.onSuccess { _state.value = ResultState.Success(it) }
+                        .onFailure {
+                            val responseRetrofit = movieRepositoryRetrofit.getDetailMovie(idMovie)
+                            responseRetrofit.collect { movie ->
+                                movie.onSuccess { _state.value = ResultState.Success(it) }
+                                    .onFailure { _state.value = ResultState.Failure(it) }
                             }
-                            .onFailure {
-                                _state.value = ResultState.Failure(Exception(it.message))
-                            }
-                    }
-            }
+                        }
+                }
         }
     }
 }

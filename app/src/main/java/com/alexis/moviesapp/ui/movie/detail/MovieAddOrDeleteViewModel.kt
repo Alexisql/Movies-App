@@ -9,6 +9,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -24,23 +26,23 @@ class MovieAddOrDeleteViewModel @Inject constructor(
 
     fun addMovieDB(movie: Movie) {
         viewModelScope.launch {
-            withContext(dispatcherIO) {
-                val response = repository.addMovie(movie)
-                response
-                    .onSuccess { _state.value = ResultState.Success(it) }
-                    .onFailure { _state.value = ResultState.Failure(Exception(it.message)) }
-            }
+            val response = repository.addMovie(movie)
+            response.catch { _state.value = ResultState.Failure(it) }
+                .flowOn(dispatcherIO)
+                .collect { msg ->
+                    msg.onSuccess { _state.value = ResultState.Success(it) }
+                }
         }
     }
 
     fun deleteMovieDB(idMovie: Int) {
         viewModelScope.launch {
-            withContext(dispatcherIO) {
-                val response = repository.deleteMovie(idMovie)
-                response
-                    .onSuccess { _state.value = ResultState.Success(it) }
-                    .onFailure { _state.value = ResultState.Failure(Exception(it.message)) }
-            }
+            val response = repository.deleteMovie(idMovie)
+            response.catch { _state.value = ResultState.Failure(it) }
+                .flowOn(dispatcherIO)
+                .collect { msg ->
+                    msg.onSuccess { _state.value = ResultState.Success(it) }
+                }
         }
     }
 }

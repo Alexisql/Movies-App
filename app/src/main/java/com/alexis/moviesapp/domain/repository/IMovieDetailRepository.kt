@@ -1,8 +1,9 @@
 package com.alexis.moviesapp.domain.repository
 
 import com.alexis.moviesapp.domain.model.MovieDetail
+import kotlinx.coroutines.flow.Flow
 
 interface IMovieDetailRepository {
 
-    suspend fun getDetailMovie(idMovie: Int): Result<MovieDetail>
+    fun getDetailMovie(idMovie: Int): Flow<Result<MovieDetail>>
 }

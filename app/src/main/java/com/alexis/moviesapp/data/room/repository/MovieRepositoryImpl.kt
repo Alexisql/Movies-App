@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 class MovieRepositoryImpl @Inject constructor(
     private val movieDao: MovieDao
-) : IMovieRepository {
+) /*: IMovieRepository {
     override fun getMovies(): Flow<List<Movie>> {
         val response = movieDao.getMovies()
         return response.map {
@@ -41,4 +41,4 @@ class MovieRepositoryImpl @Inject constructor(
             Result.failure(Exception(MOVIE_NOT_DELETED))
         }
     }
-}
+}*/

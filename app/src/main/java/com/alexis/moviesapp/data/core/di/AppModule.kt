@@ -5,6 +5,8 @@ import androidx.room.Room
 import com.alexis.moviesapp.data.core.AuthInterceptor
 import com.alexis.moviesapp.data.core.Constants.BASE_URL
 import com.alexis.moviesapp.data.core.Constants.MOVIE_DATA_BASE_NAME
+import com.alexis.moviesapp.data.realtime.repository.MovieDetailRepositoryRealTimeImpl
+import com.alexis.moviesapp.data.realtime.repository.MovieRepositoryRealTimeImpl
 import com.alexis.moviesapp.data.retrofit.repository.MovieDetailRepositoryRetrofitImpl
 import com.alexis.moviesapp.data.retrofit.repository.MoviePopularRepositoryImpl
 import com.alexis.moviesapp.data.retrofit.service.MoviePopularService
@@ -15,6 +17,8 @@ import com.alexis.moviesapp.data.room.repository.MovieRepositoryImpl
 import com.alexis.moviesapp.domain.repository.IMovieDetailRepository
 import com.alexis.moviesapp.domain.repository.IMoviePopularRepository
 import com.alexis.moviesapp.domain.repository.IMovieRepository
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -37,7 +41,7 @@ object AppModule {
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
-    annotation class MovieDetailRepositoryRoom
+    annotation class MovieDetailRepositoryRealtime
 
     @Singleton
     @Provides
@@ -77,7 +81,7 @@ object AppModule {
     @MovieDetailRepositoryRetrofit
     @Provides
     @Singleton
-    fun provideMovieDetailRepositoryRetrofit(moviePopularService: MoviePopularService): IMovieDetailRepository{
+    fun provideMovieDetailRepositoryRetrofit(moviePopularService: MoviePopularService): IMovieDetailRepository {
         return MovieDetailRepositoryRetrofitImpl(moviePopularService)
     }
 
@@ -90,17 +94,34 @@ object AppModule {
     @Provides
     fun providerMovieDao(dataBase: MovieDataBase) = dataBase.getMovieDao()
 
-    @Singleton
+    /* @Singleton
+     @Provides
+     fun providerMovieRepository(movieDao: MovieDao): IMovieRepository {
+         return MovieRepositoryImpl(movieDao)
+     }
+
+     @MovieDetailRepositoryRoom
+     @Provides
+     @Singleton
+     fun provideMovieDetailRepositoryRoom(movieDao: MovieDao): IMovieDetailRepository {
+         return MovieDetailRepositoryRoomImpl(movieDao)
+     }*/
+
+    @MovieDetailRepositoryRealtime
     @Provides
-    fun providerMovieRepository(movieDao: MovieDao): IMovieRepository {
-        return MovieRepositoryImpl(movieDao)
+    @Singleton
+    fun provideMovieDetailRepositoryRoom(dataBase: DatabaseReference): IMovieDetailRepository {
+        return MovieDetailRepositoryRealTimeImpl(dataBase)
     }
 
-    @MovieDetailRepositoryRoom
-    @Provides
     @Singleton
-    fun provideMovieDetailRepositoryRoom(movieDao: MovieDao): IMovieDetailRepository{
-        return MovieDetailRepositoryRoomImpl(movieDao)
-    }
+    @Provides
+    fun provideRealTimeDB(): DatabaseReference =
+        FirebaseDatabase.getInstance().reference.child("movie")
 
+    @Singleton
+    @Provides
+    fun provideMovieRepositoryRealTime(dataBase: DatabaseReference): IMovieRepository {
+        return MovieRepositoryRealTimeImpl(dataBase)
+    }
 }

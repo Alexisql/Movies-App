@@ -29,7 +29,7 @@ class BookmarkedViewModel @Inject constructor(
             flowMovie.catch { _state.value = ResultState.Failure(it) }
                 .flowOn(dispatcherIO)
                 .collect { movies ->
-                    _state.value = ResultState.Success(movies)
+                    movies.onSuccess { _state.value = ResultState.Success(it) }
                 }
         }
     }

@@ -5,6 +5,7 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.devtools.ksp")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -76,6 +77,11 @@ dependencies {
 
     // Splash
     implementation("androidx.core:core-splashscreen:1.0.1")
+
+    //Firebase
+    implementation(platform("com.google.firebase:firebase-bom:32.4.1"))
+    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-database-ktx")
 
     //Test
     testImplementation ("io.mockk:mockk:1.12.3")

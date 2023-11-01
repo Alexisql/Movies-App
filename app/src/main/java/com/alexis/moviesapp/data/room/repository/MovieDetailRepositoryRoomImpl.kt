@@ -9,11 +9,11 @@ import javax.inject.Inject
 
 class MovieDetailRepositoryRoomImpl @Inject constructor(
     private val movieDao: MovieDao
-) : IMovieDetailRepository {
+) /*: IMovieDetailRepository {
     override suspend fun getDetailMovie(idMovie: Int): Result<MovieDetail> {
         val movie = movieDao.getDetailMovie(idMovie)
         return movie?.let {
             Result.success(it.toMovieDetailDomain())
         } ?: Result.failure(Exception(MOVIE_NOT_FOUND))
     }
-}
+}*/
