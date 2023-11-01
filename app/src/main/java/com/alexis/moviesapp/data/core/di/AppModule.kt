@@ -116,8 +116,11 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideRealTimeDB(): DatabaseReference =
-        FirebaseDatabase.getInstance().reference.child("movie")
+    fun provideRealTimeDB(): DatabaseReference {
+        val database = FirebaseDatabase.getInstance()
+        database.setPersistenceEnabled(true)
+        return database.reference.child("movie")
+    }
 
     @Singleton
     @Provides
