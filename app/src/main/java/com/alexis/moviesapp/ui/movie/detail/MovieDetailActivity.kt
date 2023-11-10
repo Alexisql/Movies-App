@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.ProgressBar
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material.MaterialTheme
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navArgs
 import com.alexis.moviesapp.databinding.ActivityMovieDetailBinding
@@ -97,9 +98,11 @@ class MovieDetailActivity : AppCompatActivity() {
         val movie = movieDetail.movie
         binding.apply {
             ivBackdrop.loadImage(this@MovieDetailActivity, movie.backdropPathFull)
-            tvTitleDetail.text = movie.originalTitle
-            tvReleaseDateDetail.text = movie.releaseDate
-            tvOverviewDetail.text = movie.overview
+            composeView.setContent {
+                MaterialTheme {
+                    DetailMovieScreen(movie)
+                }
+            }
         }
     }
 
