@@ -58,6 +58,7 @@ dependencies {
     implementation("androidx.compose.material:material")
     implementation("androidx.activity:activity-compose:1.8.0")
     implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
 
 
     //Glide

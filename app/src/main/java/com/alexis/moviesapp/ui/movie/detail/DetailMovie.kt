@@ -13,14 +13,15 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -28,43 +29,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alexis.moviesapp.R
 import com.alexis.moviesapp.domain.model.Movie
-import com.alexis.moviesapp.domain.model.MovieDetail
 import com.alexis.moviesapp.ui.core.LoadImage
-import com.alexis.moviesapp.ui.core.ResultState
-import com.alexis.moviesapp.ui.core.ShowCircularIndicator
-import com.alexis.moviesapp.ui.core.ShowErrorScreen
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 
 @ExperimentalGlideComposeApi
 @Composable
-fun InitStateDetailMovie(movieDetailViewModel: MovieDetailViewModel) {
-    var isBookmarked by rememberSaveable { mutableStateOf(false) }
-    val uiSate by produceState<ResultState<MovieDetail>>(
-        initialValue = ResultState.Loading,
-        key1 = movieDetailViewModel
-    ) {
-        movieDetailViewModel.state.collect {
-            value = it
-        }
-    }
-
-    when (uiSate) {
-        ResultState.Loading -> ShowCircularIndicator()
-        is ResultState.Success -> {
-            val response = (uiSate as ResultState.Success<MovieDetail>).data
-            isBookmarked = response.isBookmarked
-            DetailMovieScreen(response.movie)
-        }
-        is ResultState.Failure -> {
-            val exception = (uiSate as ResultState.Failure).exception
-            ShowErrorScreen(exception.message.toString(), exception.cause.toString())
-        }
-    }
-}
-
-@ExperimentalGlideComposeApi
-@Composable
-fun DetailMovieScreen(movie: Movie) {
+fun DetailMovieScreen(
+    isBookmarked: Boolean,
+    movie: Movie,
+    movieDetailViewModel: MovieDetailViewModel
+) {
+    var isFavorite by rememberSaveable { mutableStateOf(isBookmarked) }
     Column(Modifier.fillMaxSize()) {
         LoadImage(
             modifier = Modifier
@@ -90,24 +65,37 @@ fun DetailMovieScreen(movie: Movie) {
         AddFloatingButton(
             imageVector = Icons.Outlined.ArrowBack,
             contentDescription = R.string.contentDescriptionBack
-        )
-
+        ) {
+            //
+        }
+        val imageVector = if (isFavorite) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder
         AddFloatingButton(
-            imageVector = Icons.Outlined.FavoriteBorder,
+            imageVector = imageVector,
+            color = if (isFavorite) Color.Red else Color.Black,
             contentDescription = R.string.contentDescriptionBookmarked
-        )
+        ) {
+            if (isFavorite) {
+                movieDetailViewModel.deleteMovieDB(movie.id)
+            } else {
+                movieDetailViewModel.addMovieDB(movie)
+            }
+            isFavorite = !isFavorite
+        }
     }
 }
 
 @Composable
 fun AddFloatingButton(
     imageVector: ImageVector,
-    @StringRes contentDescription: Int
+    color: Color = Color.Black,
+    @StringRes contentDescription: Int,
+    onIconClickListener: () -> Unit
 ) {
-    FloatingActionButton(onClick = { }) {
+    FloatingActionButton(onClick = { onIconClickListener() }) {
         Icon(
             imageVector = imageVector,
-            contentDescription = stringResource(contentDescription)
+            contentDescription = stringResource(contentDescription),
+            tint = color
         )
     }
 }
