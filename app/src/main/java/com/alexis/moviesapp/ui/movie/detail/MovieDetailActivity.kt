@@ -4,10 +4,19 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.navArgs
+import com.alexis.moviesapp.R
 import com.alexis.moviesapp.ui.core.ResultState
 import com.alexis.moviesapp.ui.core.ShowCircularIndicator
 import com.alexis.moviesapp.ui.core.ShowErrorScreen
@@ -28,7 +37,6 @@ class MovieDetailActivity : ComponentActivity() {
         setContent {
             MaterialTheme {
                 ObserverStateDetailMovie(detailMovieViewModelAddOrDelete)
-                ObserverStateAddOrDelete(detailMovieViewModelAddOrDelete)
             }
         }
         detailMovieViewModel.getMovie(movieDetailActivityArgs.idMovie)
@@ -36,9 +44,7 @@ class MovieDetailActivity : ComponentActivity() {
 
     @ExperimentalGlideComposeApi
     @Composable
-    fun ObserverStateDetailMovie(
-        movieAddOrDeleteViewModel: MovieAddOrDeleteViewModel
-    ) {
+    fun ObserverStateDetailMovie(movieAddOrDeleteViewModel: MovieAddOrDeleteViewModel) {
         val stateDetailMovie =
             detailMovieViewModel.state.collectAsStateWithLifecycle().value
 
@@ -50,21 +56,31 @@ class MovieDetailActivity : ComponentActivity() {
             is ResultState.Success -> {
                 DetailMovieScreen(
                     movieDetail = stateDetailMovie.data,
-                    movieAddOrDeleteViewModel = movieAddOrDeleteViewModel,
+                    movieAddOrDeleteViewModel = movieAddOrDeleteViewModel
                 )
+                ObserverStateAddOrDelete()
             }
 
             is ResultState.Failure -> {
                 val exception = stateDetailMovie.exception
                 ShowErrorScreen(exception.message.toString(), exception.cause.toString())
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    AddFloatingButton(
+                        imageVector = Icons.Outlined.ArrowBack,
+                        contentDescription = R.string.contentDescriptionBack
+                    ) { }
+                }
             }
         }
     }
 
     @Composable
-    fun ObserverStateAddOrDelete(
-        detailMovieViewModelAddOrDelete: MovieAddOrDeleteViewModel
-    ) {
+    fun ObserverStateAddOrDelete() {
         val state =
             detailMovieViewModelAddOrDelete.state.collectAsStateWithLifecycle().value
         when (state) {

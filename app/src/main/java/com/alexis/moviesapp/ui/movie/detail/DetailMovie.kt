@@ -17,9 +17,9 @@ import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -36,8 +36,9 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 @Composable
 fun DetailMovieScreen(
     movieDetail: MovieDetail,
-    movieAddOrDeleteViewModel: MovieAddOrDeleteViewModel,
+    movieAddOrDeleteViewModel: MovieAddOrDeleteViewModel
 ) {
+    var isFavorite by rememberSaveable { mutableStateOf(movieDetail.isBookmarked) }
     val movie = movieDetail.movie
     Column(Modifier.fillMaxSize()) {
         LoadImage(
@@ -64,10 +65,7 @@ fun DetailMovieScreen(
         AddFloatingButton(
             imageVector = Icons.Outlined.ArrowBack,
             contentDescription = R.string.contentDescriptionBack
-        ) {
-            //
-        }
-        var isFavorite by rememberSaveable { mutableStateOf(movieDetail.isBookmarked) }
+        ) { }
         AddFloatingButton(
             imageVector = if (isFavorite) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder,
             color = if (isFavorite) Color.Red else Color.Black,
