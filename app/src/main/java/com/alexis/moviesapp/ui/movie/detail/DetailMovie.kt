@@ -28,18 +28,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alexis.moviesapp.R
-import com.alexis.moviesapp.domain.model.Movie
+import com.alexis.moviesapp.domain.model.MovieDetail
 import com.alexis.moviesapp.ui.core.LoadImage
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 
 @ExperimentalGlideComposeApi
 @Composable
 fun DetailMovieScreen(
-    isBookmarked: Boolean,
-    movie: Movie,
-    movieDetailViewModel: MovieDetailViewModel
+    movieDetail: MovieDetail,
+    movieAddOrDeleteViewModel: MovieAddOrDeleteViewModel,
 ) {
-    var isFavorite by rememberSaveable { mutableStateOf(isBookmarked) }
+    val movie = movieDetail.movie
     Column(Modifier.fillMaxSize()) {
         LoadImage(
             modifier = Modifier
@@ -68,16 +67,16 @@ fun DetailMovieScreen(
         ) {
             //
         }
-        val imageVector = if (isFavorite) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder
+        var isFavorite by rememberSaveable { mutableStateOf(movieDetail.isBookmarked) }
         AddFloatingButton(
-            imageVector = imageVector,
+            imageVector = if (isFavorite) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder,
             color = if (isFavorite) Color.Red else Color.Black,
             contentDescription = R.string.contentDescriptionBookmarked
         ) {
             if (isFavorite) {
-                movieDetailViewModel.deleteMovieDB(movie.id)
+                movieAddOrDeleteViewModel.deleteMovieDB(movie.id)
             } else {
-                movieDetailViewModel.addMovieDB(movie)
+                movieAddOrDeleteViewModel.addMovieDB(movie)
             }
             isFavorite = !isFavorite
         }

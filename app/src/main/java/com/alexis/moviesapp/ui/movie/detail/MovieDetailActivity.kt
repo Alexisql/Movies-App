@@ -8,10 +8,10 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.navArgs
-import com.alexis.moviesapp.domain.model.MovieDetail
 import com.alexis.moviesapp.ui.core.ResultState
 import com.alexis.moviesapp.ui.core.ShowCircularIndicator
 import com.alexis.moviesapp.ui.core.ShowErrorScreen
+import com.alexis.moviesapp.ui.core.showToastShort
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,14 +20,15 @@ import dagger.hilt.android.AndroidEntryPoint
 class MovieDetailActivity : ComponentActivity() {
 
     private val detailMovieViewModel by viewModels<MovieDetailViewModel>()
+    private val detailMovieViewModelAddOrDelete by viewModels<MovieAddOrDeleteViewModel>()
     private val movieDetailActivityArgs by navArgs<MovieDetailActivityArgs>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme {
-                val stateDetailMovie =
-                    detailMovieViewModel.state.collectAsStateWithLifecycle().value
-                ObserverStateDetailMovie(stateDetailMovie = stateDetailMovie)
+                ObserverStateDetailMovie(detailMovieViewModelAddOrDelete)
+                ObserverStateAddOrDelete(detailMovieViewModelAddOrDelete)
             }
         }
         detailMovieViewModel.getMovie(movieDetailActivityArgs.idMovie)
@@ -36,19 +37,20 @@ class MovieDetailActivity : ComponentActivity() {
     @ExperimentalGlideComposeApi
     @Composable
     fun ObserverStateDetailMovie(
-        stateDetailMovie: ResultState<MovieDetail>
+        movieAddOrDeleteViewModel: MovieAddOrDeleteViewModel
     ) {
+        val stateDetailMovie =
+            detailMovieViewModel.state.collectAsStateWithLifecycle().value
+
         when (stateDetailMovie) {
             ResultState.Loading -> {
                 ShowCircularIndicator()
             }
 
             is ResultState.Success -> {
-                val response = stateDetailMovie.data
                 DetailMovieScreen(
-                    isBookmarked = response.isBookmarked,
-                    movie = response.movie,
-                    movieDetailViewModel = detailMovieViewModel
+                    movieDetail = stateDetailMovie.data,
+                    movieAddOrDeleteViewModel = movieAddOrDeleteViewModel,
                 )
             }
 
@@ -58,4 +60,27 @@ class MovieDetailActivity : ComponentActivity() {
             }
         }
     }
+
+    @Composable
+    fun ObserverStateAddOrDelete(
+        detailMovieViewModelAddOrDelete: MovieAddOrDeleteViewModel
+    ) {
+        val state =
+            detailMovieViewModelAddOrDelete.state.collectAsStateWithLifecycle().value
+        when (state) {
+            ResultState.Loading -> {}
+
+            is ResultState.Success -> {
+                this.showToastShort(state.data)
+            }
+
+            is ResultState.Failure -> {
+                ShowErrorScreen(
+                    state.exception.message.toString(),
+                    state.exception.cause.toString()
+                )
+            }
+        }
+    }
+
 }

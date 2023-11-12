@@ -3,10 +3,8 @@ package com.alexis.moviesapp.ui.movie.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alexis.moviesapp.data.core.di.AppModule
-import com.alexis.moviesapp.domain.model.Movie
 import com.alexis.moviesapp.domain.model.MovieDetail
 import com.alexis.moviesapp.domain.repository.IMovieDetailRepository
-import com.alexis.moviesapp.domain.repository.IMovieRepository
 import com.alexis.moviesapp.ui.core.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -18,7 +16,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MovieDetailViewModel @Inject constructor(
-    private val repository: IMovieRepository,
     @AppModule.MovieDetailRepositoryRetrofit private val movieRepositoryRetrofit: IMovieDetailRepository,
     @AppModule.MovieDetailRepositoryRoom private val movieRepositoryRoom: IMovieDetailRepository,
     private val dispatcherIO: CoroutineDispatcher
@@ -44,22 +41,6 @@ class MovieDetailViewModel @Inject constructor(
                                 _state.value = ResultState.Failure(Exception(it.message))
                             }
                     }
-            }
-        }
-    }
-
-    fun addMovieDB(movie: Movie) {
-        viewModelScope.launch {
-            withContext(dispatcherIO) {
-                 repository.addMovie(movie)
-            }
-        }
-    }
-
-    fun deleteMovieDB(idMovie: Int) {
-        viewModelScope.launch {
-            withContext(dispatcherIO) {
-                repository.deleteMovie(idMovie)
             }
         }
     }
