@@ -1,30 +1,32 @@
 package com.alexis.moviesapp.ui.home
 
 import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.Composable
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
-import com.alexis.moviesapp.databinding.ActivityMainBinding
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.alexis.moviesapp.ui.core.ResultState
+import com.alexis.moviesapp.ui.core.ShowCircularIndicator
+import com.alexis.moviesapp.ui.core.ShowErrorScreen
 import com.alexis.moviesapp.ui.movie.MovieViewModel
+import com.alexis.moviesapp.ui.movie.ShowMovies
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
 
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var navController: NavController
     private val viewModel: MovieViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         showSplash()
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        initUI()
+        setContent {
+            ObserverStateMovies()
+        }
+        viewModel.getMovies()
     }
 
     private fun showSplash() {
@@ -35,11 +37,27 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun initUI() {
-        val navHost =
-            supportFragmentManager.findFragmentById(binding.navHostFragmentContainer.id) as NavHostFragment
-        navController = navHost.navController
-        binding.bottomNavigationMenu.setupWithNavController(navController)
+    @OptIn(ExperimentalGlideComposeApi::class)
+    @Composable
+    fun ObserverStateMovies() {
+        val state =
+            viewModel.state.collectAsStateWithLifecycle().value
+        when (state) {
+            ResultState.Loading -> {
+                ShowCircularIndicator()
+            }
+
+            is ResultState.Success -> {
+                ShowMovies(state.data)
+            }
+
+            is ResultState.Failure -> {
+                ShowErrorScreen(
+                    state.exception.message.toString(),
+                    state.exception.cause.toString()
+                )
+            }
+        }
     }
 
 }

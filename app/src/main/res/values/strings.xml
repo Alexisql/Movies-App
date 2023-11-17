@@ -3,6 +3,7 @@
     <string name="movies">Movies</string>
     <string name="bookmarked">Bookmarked</string>
     <string name="contentDescriptionBackdropMovie">Backdrop Movie</string>
+    <string name="contentDescriptionPosterMovie">Poster Movie</string>
     <string name="contentDescriptionBack">Go Back</string>
     <string name="contentDescriptionBookmarked">Add Favorites</string>
     <string name="contentDescriptionError">!Error!</string>
