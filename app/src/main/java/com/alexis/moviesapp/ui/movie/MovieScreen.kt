@@ -1,14 +1,10 @@
 package com.alexis.moviesapp.ui.movie
 
-import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -17,20 +13,19 @@ import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.alexis.moviesapp.R
 import com.alexis.moviesapp.domain.model.Movie
 import com.alexis.moviesapp.ui.core.LoadImage
+import com.alexis.moviesapp.ui.core.Screen
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 
 @ExperimentalGlideComposeApi
 @Composable
-fun ShowMovies(listMovies: List<Movie>) {
-    val context = LocalContext.current
+fun ShowMovies(navHostController: NavHostController, listMovies: List<Movie>) {
     LazyVerticalGrid(
         modifier = Modifier
             .padding(16.dp)
@@ -41,7 +36,7 @@ fun ShowMovies(listMovies: List<Movie>) {
         content = {
             items(listMovies) { movie ->
                 ItemMovie(movie = movie, onItemSelected = {
-                    Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show()
+                    navHostController.navigate(Screen.Detail.createRoute(it))
                 })
             }
         })

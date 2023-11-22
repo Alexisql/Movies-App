@@ -27,10 +27,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.alexis.moviesapp.R
 import com.alexis.moviesapp.domain.model.MovieDetail
 import com.alexis.moviesapp.ui.core.LoadImage
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+
+@ExperimentalGlideComposeApi
+@Composable
+fun GetDetailMovie(
+    idMovie:Int,
+    detailMovieViewModel: MovieDetailViewModel = hiltViewModel(),
+    movieAddOrDeleteViewModel: MovieAddOrDeleteViewModel = hiltViewModel()
+) {
+    ObserverStateDetailMovie(detailMovieViewModel, movieAddOrDeleteViewModel)
+    detailMovieViewModel.getMovie(idMovie)
+}
 
 @ExperimentalGlideComposeApi
 @Composable

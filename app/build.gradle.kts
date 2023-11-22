@@ -3,7 +3,6 @@ plugins {
     id("org.jetbrains.kotlin.android")
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
-    id("androidx.navigation.safeargs.kotlin")
     id("com.google.devtools.ksp")
 }
 
@@ -59,7 +58,8 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.8.0")
     implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
-
+    implementation("androidx.navigation:navigation-compose:2.5.3")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     //Glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
@@ -74,11 +74,6 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
     implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
-
-    //Navigation
-    val navVersion = "2.7.4"
-    implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
-    implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
 
     //Room
     val roomVersion = "2.6.0"

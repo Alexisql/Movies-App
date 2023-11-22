@@ -4,14 +4,16 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.runtime.Composable
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.alexis.moviesapp.ui.core.ResultState
-import com.alexis.moviesapp.ui.core.ShowCircularIndicator
-import com.alexis.moviesapp.ui.core.ShowErrorScreen
+import com.alexis.moviesapp.ui.core.Screen
 import com.alexis.moviesapp.ui.movie.MovieViewModel
-import com.alexis.moviesapp.ui.movie.ShowMovies
+import com.alexis.moviesapp.ui.movie.detail.GetDetailMovie
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,42 +22,30 @@ class MainActivity : ComponentActivity() {
 
     private val viewModel: MovieViewModel by viewModels()
 
+    @OptIn(ExperimentalGlideComposeApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         showSplash()
         setContent {
-            ObserverStateMovies()
+            val navHostController = rememberNavController()
+            NavHost(navController = navHostController, startDestination = Screen.Home.route) {
+                composable(Screen.Home.route) { GetMovies(navHostController, viewModel) }
+                composable(
+                    Screen.Detail.route,
+                    arguments = listOf(navArgument("idMovie") {
+                        type = NavType.IntType
+                    })
+                ) { backStackEntry ->
+                    GetDetailMovie(backStackEntry.arguments?.getInt("idMovie")!!)
+                }
+            }
         }
-        viewModel.getMovies()
     }
 
     private fun showSplash() {
         installSplashScreen().apply {
             setKeepOnScreenCondition {
                 viewModel.state.value == ResultState.Loading
-            }
-        }
-    }
-
-    @OptIn(ExperimentalGlideComposeApi::class)
-    @Composable
-    fun ObserverStateMovies() {
-        val state =
-            viewModel.state.collectAsStateWithLifecycle().value
-        when (state) {
-            ResultState.Loading -> {
-                ShowCircularIndicator()
-            }
-
-            is ResultState.Success -> {
-                ShowMovies(state.data)
-            }
-
-            is ResultState.Failure -> {
-                ShowErrorScreen(
-                    state.exception.message.toString(),
-                    state.exception.cause.toString()
-                )
             }
         }
     }
