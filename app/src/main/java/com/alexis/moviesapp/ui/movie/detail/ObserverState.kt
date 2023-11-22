@@ -55,7 +55,9 @@ fun ObserverStateDetailMovie(
                 AddFloatingButton(
                     imageVector = Icons.Outlined.ArrowBack,
                     contentDescription = R.string.contentDescriptionBack
-                ) { }
+                ) {
+                    navController.popBackStack()
+                }
             }
         }
     }

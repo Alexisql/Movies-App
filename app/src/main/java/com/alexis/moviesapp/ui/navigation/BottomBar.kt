@@ -1,6 +1,5 @@
 package com.alexis.moviesapp.ui.navigation
 
-import android.util.Log
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -11,22 +10,22 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.alexis.moviesapp.R
 import com.alexis.moviesapp.ui.core.Screen
+import com.alexis.moviesapp.ui.core.navigateSingleTopTo
 
 @Composable
-fun BottomNavigationScreen(navController: NavController) {
+fun BottomNavigationScreen(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     BottomNavigation {
         BottomNavigationItem(
             selected = currentDestination?.hierarchy?.any { it.route == Screen.Home.route } == true,
             onClick = {
-                Log.i("TEST", "SCREEN-ONE")
-                navController.navigate(Screen.Home.route)
+                navController.navigateSingleTopTo(Screen.Home.route)
             },
             icon = {
                 Icon(
@@ -39,8 +38,7 @@ fun BottomNavigationScreen(navController: NavController) {
         BottomNavigationItem(
             selected = currentDestination?.hierarchy?.any { it.route == Screen.Bookmarked.route } == true,
             onClick = {
-                Log.i("TEST", "SCREEN-TWO")
-                navController.navigate(Screen.Bookmarked.route)
+                navController.navigateSingleTopTo(Screen.Bookmarked.route)
             },
             icon = {
                 Icon(
