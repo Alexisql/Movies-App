@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import com.alexis.moviesapp.R
 import com.alexis.moviesapp.ui.core.ResultState
 import com.alexis.moviesapp.ui.core.ShowCircularIndicator
@@ -21,6 +22,7 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 @ExperimentalGlideComposeApi
 @Composable
 fun ObserverStateDetailMovie(
+    navController : NavHostController,
     detailMovieViewModel: MovieDetailViewModel,
     movieAddOrDeleteViewModel: MovieAddOrDeleteViewModel
 ) {
@@ -34,6 +36,7 @@ fun ObserverStateDetailMovie(
 
         is ResultState.Success -> {
             ShowDetailMovie(
+                navController = navController,
                 movieDetail = stateDetailMovie.data,
                 movieAddOrDeleteViewModel = movieAddOrDeleteViewModel
             )

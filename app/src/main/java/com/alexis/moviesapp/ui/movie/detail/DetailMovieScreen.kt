@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.alexis.moviesapp.R
 import com.alexis.moviesapp.domain.model.MovieDetail
 import com.alexis.moviesapp.ui.core.LoadImage
@@ -36,17 +37,19 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 @ExperimentalGlideComposeApi
 @Composable
 fun GetDetailMovie(
-    idMovie:Int,
+    navController: NavHostController,
+    idMovie: Int,
     detailMovieViewModel: MovieDetailViewModel = hiltViewModel(),
     movieAddOrDeleteViewModel: MovieAddOrDeleteViewModel = hiltViewModel()
 ) {
-    ObserverStateDetailMovie(detailMovieViewModel, movieAddOrDeleteViewModel)
+    ObserverStateDetailMovie(navController, detailMovieViewModel, movieAddOrDeleteViewModel)
     detailMovieViewModel.getMovie(idMovie)
 }
 
 @ExperimentalGlideComposeApi
 @Composable
 fun ShowDetailMovie(
+    navController: NavHostController,
     movieDetail: MovieDetail,
     movieAddOrDeleteViewModel: MovieAddOrDeleteViewModel
 ) {
@@ -77,7 +80,9 @@ fun ShowDetailMovie(
         AddFloatingButton(
             imageVector = Icons.Outlined.ArrowBack,
             contentDescription = R.string.contentDescriptionBack
-        ) { }
+        ) {
+            navController.popBackStack()
+        }
         AddFloatingButton(
             imageVector = if (isFavorite) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder,
             color = if (isFavorite) Color.Red else Color.Black,

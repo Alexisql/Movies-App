@@ -17,11 +17,6 @@ import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterInside
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 
-@Composable
-fun AddSpacer(size: Int) {
-    Spacer(modifier = Modifier.size(size.dp))
-}
-
 @ExperimentalGlideComposeApi
 @Composable
 fun LoadImage(

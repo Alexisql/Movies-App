@@ -59,7 +59,10 @@ class MainActivity : ComponentActivity() {
                             type = NavType.IntType
                         })
                     ) { backStackEntry ->
-                        GetDetailMovie(backStackEntry.arguments?.getInt("idMovie")!!)
+                        GetDetailMovie(
+                            navController = navHostController,
+                            idMovie = backStackEntry.arguments?.getInt("idMovie")!!
+                        )
                     }
                 }
 
