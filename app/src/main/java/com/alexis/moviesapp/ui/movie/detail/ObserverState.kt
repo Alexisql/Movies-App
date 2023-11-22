@@ -33,7 +33,7 @@ fun ObserverStateDetailMovie(
         }
 
         is ResultState.Success -> {
-            DetailMovieScreen(
+            ShowDetailMovie(
                 movieDetail = stateDetailMovie.data,
                 movieAddOrDeleteViewModel = movieAddOrDeleteViewModel
             )

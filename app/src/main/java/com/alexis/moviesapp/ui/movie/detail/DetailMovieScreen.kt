@@ -46,7 +46,7 @@ fun GetDetailMovie(
 
 @ExperimentalGlideComposeApi
 @Composable
-fun DetailMovieScreen(
+fun ShowDetailMovie(
     movieDetail: MovieDetail,
     movieAddOrDeleteViewModel: MovieAddOrDeleteViewModel
 ) {

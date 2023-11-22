@@ -16,12 +16,56 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.alexis.moviesapp.R
 import com.alexis.moviesapp.domain.model.Movie
 import com.alexis.moviesapp.ui.core.LoadImage
+import com.alexis.moviesapp.ui.core.ResultState
 import com.alexis.moviesapp.ui.core.Screen
+import com.alexis.moviesapp.ui.core.ShowCircularIndicator
+import com.alexis.moviesapp.ui.core.ShowErrorScreen
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import kotlinx.coroutines.flow.StateFlow
+
+@Composable
+fun GetMovies(
+    navHostController: NavHostController,
+    resultState: StateFlow<ResultState<List<Movie>>>,
+    onGetMovies: () -> Unit
+) {
+    onGetMovies()
+    ObserverStateMovies(navHostController, resultState)
+}
+
+@OptIn(ExperimentalGlideComposeApi::class)
+@Composable
+fun ObserverStateMovies(
+    navHostController: NavHostController,
+    resultState: StateFlow<ResultState<List<Movie>>>
+) {
+    val state =
+        resultState.collectAsStateWithLifecycle().value
+    when (state) {
+        ResultState.Loading -> {
+            ShowCircularIndicator()
+        }
+
+        is ResultState.Success -> {
+            ShowMovies(
+                navHostController,
+                state.data
+            )
+        }
+
+        is ResultState.Failure -> {
+            ShowErrorScreen(
+                state.exception.message.toString(),
+                state.exception.cause.toString()
+            )
+        }
+    }
+}
 
 @ExperimentalGlideComposeApi
 @Composable

@@ -1,7 +1,11 @@
 <resources>
+    <!-- Routes-->
+    <string name="home">Home</string>
+    <string name="bookmarked">Bookmarked</string>
+    <!-- End Routes -->
+
     <string name="app_name">MoviesApp</string>
     <string name="movies">Movies</string>
-    <string name="bookmarked">Bookmarked</string>
     <string name="contentDescriptionBackdropMovie">Backdrop Movie</string>
     <string name="contentDescriptionPosterMovie">Poster Movie</string>
     <string name="contentDescriptionBack">Go Back</string>
