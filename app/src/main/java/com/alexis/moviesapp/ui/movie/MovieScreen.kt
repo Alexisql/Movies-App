@@ -9,8 +9,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -94,9 +94,7 @@ fun ItemMovie(movie: Movie, onItemSelected: (Int) -> Unit) {
             .clickable {
                 onItemSelected(movie.id)
             },
-        shape = RoundedCornerShape(10.dp),
-        elevation = 8.dp
-
+        shape = RoundedCornerShape(10.dp)
     ) {
         Column {
             LoadImage(

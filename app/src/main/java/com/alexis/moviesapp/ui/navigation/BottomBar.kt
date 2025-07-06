@@ -1,12 +1,12 @@
 package com.alexis.moviesapp.ui.navigation
 
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
@@ -21,8 +21,8 @@ import com.alexis.moviesapp.ui.core.navigateSingleTopTo
 fun BottomNavigationScreen(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
-    BottomNavigation {
-        BottomNavigationItem(
+    NavigationBar {
+        NavigationBarItem(
             selected = currentDestination?.hierarchy?.any { it.route == Screen.Home.route } == true,
             onClick = {
                 navController.navigateSingleTopTo(Screen.Home.route)
@@ -35,7 +35,7 @@ fun BottomNavigationScreen(navController: NavHostController) {
             },
             label = { Text(text = stringResource(id = R.string.home)) }
         )
-        BottomNavigationItem(
+        NavigationBarItem(
             selected = currentDestination?.hierarchy?.any { it.route == Screen.Bookmarked.route } == true,
             onClick = {
                 navController.navigateSingleTopTo(Screen.Bookmarked.route)
